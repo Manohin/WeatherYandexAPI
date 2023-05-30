@@ -9,7 +9,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    let weatherConditions: [String: String] = [
+    private let weatherConditions: [String: String] = [
         "overcast": "Облачно",
         "clear": "Ясно",
         "partly-cloudy": "Переменная облачность",
@@ -30,6 +30,12 @@ class ViewController: UIViewController {
         "thunderstorm-with-hail": "гроза с градом"
     ]
     
+    private let tempJoke: [Int: String] = [
+        13: "Прохладно"
+    ]
+    
+    
+    @IBOutlet var tempLabel: UILabel!
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var conditionLabel: UILabel!
     
@@ -71,7 +77,24 @@ class ViewController: UIViewController {
     }
     
     func updateUI(with weatherData: WeatherData) {
-        temperatureLabel.text = "\(weatherData.fact.temp)°C"
+        
+        switch weatherData.fact.temp {
+        case 0...10:
+            temperatureLabel.text = "Холодно"
+        case 11...14:
+            temperatureLabel.text = "Прохладно"
+        case 15...20:
+            temperatureLabel.text = "Тепло"
+        case 21...27:
+            temperatureLabel.text = "Жарко"
+        case 28...35:
+            temperatureLabel.text = "Вообще жарища"
+        default:
+            temperatureLabel.text = "Мороз"
+        }
+        
+       tempLabel.text = "\(weatherData.fact.temp)°C"
+        
         
         if let condition = weatherConditions[weatherData.fact.condition] {
             conditionLabel.text = condition
