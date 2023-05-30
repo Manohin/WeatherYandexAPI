@@ -31,11 +31,6 @@ class ViewController: UIViewController {
         "cloudy": "Облачно"
     ]
     
-    private let tempJoke: [Int: String] = [
-        13: "Прохладно"
-    ]
-    
-    
     @IBOutlet var tempLabel: UILabel!
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var conditionLabel: UILabel!
@@ -78,7 +73,6 @@ class ViewController: UIViewController {
     }
     
     func updateUI(with weatherData: WeatherData) {
-        
         switch weatherData.fact.temp {
         case 0...10:
             temperatureLabel.text = "Холодно"
@@ -95,7 +89,6 @@ class ViewController: UIViewController {
         }
         
        tempLabel.text = "\(weatherData.fact.temp)°C"
-        
         
         if let condition = weatherConditions[weatherData.fact.condition] {
             conditionLabel.text = condition
