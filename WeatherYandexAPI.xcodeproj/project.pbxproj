@@ -13,6 +13,7 @@
 		8AFC1F432A2563D600647CDA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC1F412A2563D600647CDA /* Main.storyboard */; };
 		8AFC1F452A2563D700647CDA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC1F442A2563D700647CDA /* Assets.xcassets */; };
 		8AFC1F482A2563D700647CDA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC1F462A2563D700647CDA /* LaunchScreen.storyboard */; };
+		8AFC1F502A256F3900647CDA /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFC1F4F2A256F3900647CDA /* WeatherData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		8AFC1F442A2563D700647CDA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8AFC1F472A2563D700647CDA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8AFC1F492A2563D700647CDA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8AFC1F4F2A256F3900647CDA /* WeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 				8AFC1F3B2A2563D600647CDA /* AppDelegate.swift */,
 				8AFC1F3D2A2563D600647CDA /* SceneDelegate.swift */,
 				8AFC1F3F2A2563D600647CDA /* ViewController.swift */,
+				8AFC1F4F2A256F3900647CDA /* WeatherData.swift */,
 				8AFC1F412A2563D600647CDA /* Main.storyboard */,
 				8AFC1F442A2563D700647CDA /* Assets.xcassets */,
 				8AFC1F462A2563D700647CDA /* LaunchScreen.storyboard */,
@@ -140,6 +143,7 @@
 			files = (
 				8AFC1F402A2563D600647CDA /* ViewController.swift in Sources */,
 				8AFC1F3C2A2563D600647CDA /* AppDelegate.swift in Sources */,
+				8AFC1F502A256F3900647CDA /* WeatherData.swift in Sources */,
 				8AFC1F3E2A2563D600647CDA /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -300,11 +304,14 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "Alexey-Manohin.WeatherYandexAPI";
+				PRODUCT_BUNDLE_IDENTIFIER = "Alexey-Manohin.WeatherYandexAPI2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -328,11 +335,14 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "Alexey-Manohin.WeatherYandexAPI";
+				PRODUCT_BUNDLE_IDENTIFIER = "Alexey-Manohin.WeatherYandexAPI2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
