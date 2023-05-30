@@ -27,7 +27,8 @@ class ViewController: UIViewController {
         "hail": "град",
         "thunderstorm": "гроза",
         "thunderstorm-with-rain": "дождь с грозой",
-        "thunderstorm-with-hail": "гроза с градом"
+        "thunderstorm-with-hail": "гроза с градом",
+        "cloudy": "Облачно"
     ]
     
     private let tempJoke: [Int: String] = [
