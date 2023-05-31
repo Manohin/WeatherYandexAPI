@@ -7,54 +7,63 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Weather View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="WeatherYandexAPI" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="WeatherViewController" customModule="WeatherYandexAPI" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="YKy-SR-S7Q">
-                                <rect key="frame" x="16" y="366" width="361" height="120.33333333333331"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="YKy-SR-S7Q">
+                                <rect key="frame" x="16" y="359.33333333333331" width="361" height="133.66666666666669"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fgh-sT-5Ha">
-                                        <rect key="frame" x="155.66666666666666" y="0.0" width="50" height="50"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Температура" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fgh-sT-5Ha">
+                                        <rect key="frame" x="86.666666666666671" y="0.0" width="187.66666666666663" height="34.666666666666664"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="29"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ощущается как:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g61-UY-rJH">
-                                        <rect key="frame" x="116.33333333333336" y="50" width="128.66666666666663" height="20.333333333333329"/>
+                                        <rect key="frame" x="116.33333333333336" y="42.666666666666686" width="128.66666666666663" height="20.333333333333329"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="moG-cq-iK7">
-                                        <rect key="frame" x="180.66666666666666" y="70.333333333333314" width="0.0" height="0.0"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="На улице" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mjU-K8-9vs">
+                                        <rect key="frame" x="126.33333333333334" y="71" width="108.66666666666666" height="29"/>
+                                        <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="25"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mjU-K8-9vs">
-                                        <rect key="frame" x="155.66666666666666" y="70.333333333333314" width="50" height="50"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Одевайтесь теплее" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="moG-cq-iK7">
+                                        <rect key="frame" x="111.00000000000001" y="108" width="139.33333333333337" height="25.666666666666657"/>
+                                        <fontDescription key="fontDescription" name="Noteworthy-Bold" family="Noteworthy" pointSize="16"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                             </stackView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="WjG-oP-Cfn">
+                                <rect key="frame" x="186.66666666666666" y="416" width="20" height="20"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="hidesWhenStopped" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="0.84702593088150024" green="0.95701056718826294" blue="0.93338078260421753" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="WjG-oP-Cfn" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="27e-aQ-RDo"/>
                             <constraint firstItem="YKy-SR-S7Q" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="fxQ-iO-gjT"/>
                             <constraint firstItem="YKy-SR-S7Q" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="hJE-cd-zAW"/>
                             <constraint firstItem="YKy-SR-S7Q" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="lFE-YE-fik"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="YKy-SR-S7Q" secondAttribute="trailing" constant="16" id="vg2-IM-MG5"/>
+                            <constraint firstItem="WjG-oP-Cfn" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="xby-YX-smE"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="WjG-oP-Cfn" id="lTj-QY-AXb"/>
                         <outlet property="conditionLabel" destination="mjU-K8-9vs" id="6YG-Xu-NpE"/>
                         <outlet property="feelsLikeLabel" destination="g61-UY-rJH" id="KWR-N3-Tse"/>
                         <outlet property="recommendationsLabel" destination="moG-cq-iK7" id="Jz9-eM-SWq"/>
