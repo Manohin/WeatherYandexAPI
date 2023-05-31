@@ -46,7 +46,7 @@ final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        activityIndicator.startAnimating()
+    setupUI()
         fetchDataFromAPI()
         recommendationsLabel.textColor = .systemBlue
         
@@ -59,21 +59,45 @@ final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
         startUpdatingLocation()
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else {
-            return
+    private func setupUI() {
+            activityIndicator.startAnimating()
+            recommendationsLabel.textColor = .systemBlue
         }
-        latitude = location.coordinate.latitude
-        longitude = location.coordinate.longitude
-        
-        fetchDataFromAPI()
-    }
     
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        if status == .authorizedWhenInUse {
-            manager.startUpdatingLocation()
+    private func checkLocationAuthorization() {
+            let status = locationManager.authorizationStatus
+            switch status {
+            case .authorizedWhenInUse, .authorizedAlways:
+                startUpdatingLocation()
+            case .denied, .restricted:
+                showLocationPermissionAlert()
+            case .notDetermined:
+                locationManager.requestWhenInUseAuthorization()
+            @unknown default:
+                break
+            }
         }
-    }
+        
+    private func startUpdatingLocation() {
+            let status = locationManager.authorizationStatus
+            if status == .authorizedWhenInUse || status == .authorizedAlways {
+                locationManager.startUpdatingLocation()
+            }
+        }
+        
+        func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+            checkLocationAuthorization()
+        }
+        
+        func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+            guard let location = locations.last else {
+                return
+            }
+            latitude = location.coordinate.latitude
+            longitude = location.coordinate.longitude
+            
+            fetchDataFromAPI()
+        }
     
    private func fetchDataFromAPI() {
         guard let url = URL(string: "https://api.weather.yandex.ru/v2/informers?lat=\(latitude)&lon=\(longitude)") else {
@@ -133,18 +157,18 @@ final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
-    private func startUpdatingLocation() {
-        let status = locationManager.authorizationStatus
-        if status == .authorizedWhenInUse || status == .authorizedAlways {
-            locationManager.startUpdatingLocation()
-        } else if status == .denied {
-            DispatchQueue.main.async {
-                self.showLocationPermissionAlert()
-            }
-            // Обработка случая, когда разрешение на использование местоположения запрещено
-            // Можно показать пользователю сообщение о необходимости предоставить доступ к местоположению
-        }
-    }
+//    private func startUpdatingLocation() {
+//        let status = locationManager.authorizationStatus
+//        if status == .authorizedWhenInUse || status == .authorizedAlways {
+//            locationManager.startUpdatingLocation()
+//        } else if status == .denied {
+//            DispatchQueue.main.async {
+//                self.showLocationPermissionAlert()
+//            }
+//            // Обработка случая, когда разрешение на использование местоположения запрещено
+//            // Можно показать пользователю сообщение о необходимости предоставить доступ к местоположению
+//        }
+//    }
     
     private func showLocationPermissionAlert() {
         let alert = UIAlertController(title: "Ошибка", message: "Вы не разрешили определение местоположения. Погода будет отображаться некорректно. Пожалуйста, разрешите доступ в настройках приложения.", preferredStyle: .alert)
