@@ -58,16 +58,48 @@
 		8AFC1F3A2A2563D600647CDA /* WeatherYandexAPI */ = {
 			isa = PBXGroup;
 			children = (
-				8AFC1F3B2A2563D600647CDA /* AppDelegate.swift */,
-				8AFC1F3D2A2563D600647CDA /* SceneDelegate.swift */,
-				8AFC1F3F2A2563D600647CDA /* ViewController.swift */,
-				8AFC1F4F2A256F3900647CDA /* WeatherData.swift */,
-				8AFC1F412A2563D600647CDA /* Main.storyboard */,
+				8AFC1F512A27F1A700647CDA /* Models */,
+				8AFC1F522A27F1BA00647CDA /* ViewControllers */,
+				8AFC1F532A27F1C800647CDA /* Storyboards */,
+				8AFC1F542A27F1D600647CDA /* System */,
 				8AFC1F442A2563D700647CDA /* Assets.xcassets */,
-				8AFC1F462A2563D700647CDA /* LaunchScreen.storyboard */,
-				8AFC1F492A2563D700647CDA /* Info.plist */,
 			);
 			path = WeatherYandexAPI;
+			sourceTree = "<group>";
+		};
+		8AFC1F512A27F1A700647CDA /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8AFC1F4F2A256F3900647CDA /* WeatherData.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8AFC1F522A27F1BA00647CDA /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				8AFC1F3F2A2563D600647CDA /* ViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		8AFC1F532A27F1C800647CDA /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				8AFC1F412A2563D600647CDA /* Main.storyboard */,
+				8AFC1F462A2563D700647CDA /* LaunchScreen.storyboard */,
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		8AFC1F542A27F1D600647CDA /* System */ = {
+			isa = PBXGroup;
+			children = (
+				8AFC1F3B2A2563D600647CDA /* AppDelegate.swift */,
+				8AFC1F3D2A2563D600647CDA /* SceneDelegate.swift */,
+				8AFC1F492A2563D700647CDA /* Info.plist */,
+			);
+			path = System;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -293,7 +325,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P894A63FN8;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = WeatherYandexAPI/Info.plist;
+				INFOPLIST_FILE = WeatherYandexAPI/System/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -324,7 +356,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P894A63FN8;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = WeatherYandexAPI/Info.plist;
+				INFOPLIST_FILE = WeatherYandexAPI/System/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
