@@ -19,10 +19,12 @@ struct Fact: Codable {
     let temp: Int
     let feelsLike: Int
     let condition: String
+    let icon: String?
     
     private enum CodingKeys: String, CodingKey {
         case temp = "temp"
         case condition = "condition"
         case feelsLike = "feels_like"
+        case icon = "icon"
     }
 }

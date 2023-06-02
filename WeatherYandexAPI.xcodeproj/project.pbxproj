@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8A447C7C2A29DF9400C2F4CC /* SVGKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8A447C7B2A29DF9400C2F4CC /* SVGKit */; };
+		8A447C7E2A29DF9400C2F4CC /* SVGKitSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8A447C7D2A29DF9400C2F4CC /* SVGKitSwift */; };
+		8A447C822A2A225200C2F4CC /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A447C812A2A225200C2F4CC /* NetworkManager.swift */; };
 		8AFC1F3C2A2563D600647CDA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFC1F3B2A2563D600647CDA /* AppDelegate.swift */; };
 		8AFC1F3E2A2563D600647CDA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFC1F3D2A2563D600647CDA /* SceneDelegate.swift */; };
 		8AFC1F402A2563D600647CDA /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFC1F3F2A2563D600647CDA /* WeatherViewController.swift */; };
@@ -17,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8A447C812A2A225200C2F4CC /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		8AFC1F382A2563D600647CDA /* WeatherYandexAPI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherYandexAPI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AFC1F3B2A2563D600647CDA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8AFC1F3D2A2563D600647CDA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -33,6 +37,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A447C7E2A29DF9400C2F4CC /* SVGKitSwift in Frameworks */,
+				8A447C7C2A29DF9400C2F4CC /* SVGKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,6 +64,7 @@
 		8AFC1F3A2A2563D600647CDA /* WeatherYandexAPI */ = {
 			isa = PBXGroup;
 			children = (
+				8A447C812A2A225200C2F4CC /* NetworkManager.swift */,
 				8AFC1F512A27F1A700647CDA /* Models */,
 				8AFC1F522A27F1BA00647CDA /* ViewControllers */,
 				8AFC1F532A27F1C800647CDA /* Storyboards */,
@@ -118,6 +125,10 @@
 			dependencies = (
 			);
 			name = WeatherYandexAPI;
+			packageProductDependencies = (
+				8A447C7B2A29DF9400C2F4CC /* SVGKit */,
+				8A447C7D2A29DF9400C2F4CC /* SVGKitSwift */,
+			);
 			productName = WeatherYandexAPI;
 			productReference = 8AFC1F382A2563D600647CDA /* WeatherYandexAPI.app */;
 			productType = "com.apple.product-type.application";
@@ -146,6 +157,9 @@
 				Base,
 			);
 			mainGroup = 8AFC1F2F2A2563D600647CDA;
+			packageReferences = (
+				8A447C7A2A29DF9400C2F4CC /* XCRemoteSwiftPackageReference "SVGKit" */,
+			);
 			productRefGroup = 8AFC1F392A2563D600647CDA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -175,6 +189,7 @@
 			files = (
 				8AFC1F402A2563D600647CDA /* WeatherViewController.swift in Sources */,
 				8AFC1F3C2A2563D600647CDA /* AppDelegate.swift in Sources */,
+				8A447C822A2A225200C2F4CC /* NetworkManager.swift in Sources */,
 				8AFC1F502A256F3900647CDA /* WeatherData.swift in Sources */,
 				8AFC1F3E2A2563D600647CDA /* SceneDelegate.swift in Sources */,
 			);
@@ -400,6 +415,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8A447C7A2A29DF9400C2F4CC /* XCRemoteSwiftPackageReference "SVGKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SVGKit/SVGKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8A447C7B2A29DF9400C2F4CC /* SVGKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A447C7A2A29DF9400C2F4CC /* XCRemoteSwiftPackageReference "SVGKit" */;
+			productName = SVGKit;
+		};
+		8A447C7D2A29DF9400C2F4CC /* SVGKitSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A447C7A2A29DF9400C2F4CC /* XCRemoteSwiftPackageReference "SVGKit" */;
+			productName = SVGKitSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8AFC1F302A2563D600647CDA /* Project object */;
 }
