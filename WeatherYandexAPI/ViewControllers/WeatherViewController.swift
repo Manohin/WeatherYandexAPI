@@ -7,7 +7,7 @@
 
 import UIKit
 import CoreLocation
-
+import SVGKit
 
 final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
@@ -42,11 +42,11 @@ final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var conditionLabel: UILabel!
     @IBOutlet var feelsLikeLabel: UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    
+    @IBOutlet weak var weatherIconImageView: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    setupUI()
+        setupUI()
         fetchDataFromAPI()
         recommendationsLabel.textColor = .systemBlue
         
@@ -60,46 +60,46 @@ final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     private func setupUI() {
-            activityIndicator.startAnimating()
-            recommendationsLabel.textColor = .systemBlue
-        }
+        activityIndicator.startAnimating()
+        recommendationsLabel.textColor = .systemBlue
+    }
     
     private func checkLocationAuthorization() {
-            let status = locationManager.authorizationStatus
-            switch status {
-            case .authorizedWhenInUse, .authorizedAlways:
-                startUpdatingLocation()
-            case .denied, .restricted:
-                showLocationPermissionAlert()
-            case .notDetermined:
-                locationManager.requestWhenInUseAuthorization()
-            @unknown default:
-                break
-            }
+        let status = locationManager.authorizationStatus
+        switch status {
+        case .authorizedWhenInUse, .authorizedAlways:
+            startUpdatingLocation()
+        case .denied, .restricted:
+            showLocationPermissionAlert()
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        @unknown default:
+            break
         }
-        
-    private func startUpdatingLocation() {
-            let status = locationManager.authorizationStatus
-            if status == .authorizedWhenInUse || status == .authorizedAlways {
-                locationManager.startUpdatingLocation()
-            }
-        }
-        
-        func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-            checkLocationAuthorization()
-        }
-        
-        func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-            guard let location = locations.last else {
-                return
-            }
-            latitude = location.coordinate.latitude
-            longitude = location.coordinate.longitude
-            
-            fetchDataFromAPI()
-        }
+    }
     
-   private func fetchDataFromAPI() {
+    private func startUpdatingLocation() {
+        let status = locationManager.authorizationStatus
+        if status == .authorizedWhenInUse || status == .authorizedAlways {
+            locationManager.startUpdatingLocation()
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        checkLocationAuthorization()
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else {
+            return
+        }
+        latitude = location.coordinate.latitude
+        longitude = location.coordinate.longitude
+        
+        fetchDataFromAPI()
+    }
+    
+    private func fetchDataFromAPI() {
         guard let url = URL(string: "https://api.weather.yandex.ru/v2/informers?lat=\(latitude)&lon=\(longitude)") else {
             return
         }
@@ -131,6 +131,17 @@ final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     private func updateUI(with weatherData: WeatherData) {
+        if let icon = weatherData.fact.icon {
+            let iconURLString = "https://yastatic.net/weather/i/icons/funky/dark/\(icon).svg"
+            if let iconURL = URL(string: iconURLString) {
+                DispatchQueue.global().async {
+                    let svgImage = SVGKImage(contentsOf: iconURL)
+                    DispatchQueue.main.async {
+                        self.weatherIconImageView.image = svgImage?.uiImage
+                    }
+                }
+            }
+        }
         
         switch weatherData.fact.feelsLike {
         case 1...10:
@@ -157,19 +168,6 @@ final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
-//    private func startUpdatingLocation() {
-//        let status = locationManager.authorizationStatus
-//        if status == .authorizedWhenInUse || status == .authorizedAlways {
-//            locationManager.startUpdatingLocation()
-//        } else if status == .denied {
-//            DispatchQueue.main.async {
-//                self.showLocationPermissionAlert()
-//            }
-//            // Обработка случая, когда разрешение на использование местоположения запрещено
-//            // Можно показать пользователю сообщение о необходимости предоставить доступ к местоположению
-//        }
-//    }
-    
     private func showLocationPermissionAlert() {
         let alert = UIAlertController(title: "Ошибка", message: "Вы не разрешили определение местоположения. Погода будет отображаться некорректно. Пожалуйста, разрешите доступ в настройках приложения.", preferredStyle: .alert)
         let settingsAction = UIAlertAction(title: "Настройки", style: .default) { (_) in
@@ -185,5 +183,4 @@ final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
         alert.addAction(cancelAction)
         present(alert, animated: true, completion: nil)
     }
-
 }

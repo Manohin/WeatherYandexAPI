@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8A447C7C2A29DF9400C2F4CC /* SVGKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8A447C7B2A29DF9400C2F4CC /* SVGKit */; };
+		8A447C7E2A29DF9400C2F4CC /* SVGKitSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8A447C7D2A29DF9400C2F4CC /* SVGKitSwift */; };
 		8AFC1F3C2A2563D600647CDA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFC1F3B2A2563D600647CDA /* AppDelegate.swift */; };
 		8AFC1F3E2A2563D600647CDA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFC1F3D2A2563D600647CDA /* SceneDelegate.swift */; };
 		8AFC1F402A2563D600647CDA /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFC1F3F2A2563D600647CDA /* WeatherViewController.swift */; };
@@ -33,6 +35,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A447C7E2A29DF9400C2F4CC /* SVGKitSwift in Frameworks */,
+				8A447C7C2A29DF9400C2F4CC /* SVGKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,6 +122,10 @@
 			dependencies = (
 			);
 			name = WeatherYandexAPI;
+			packageProductDependencies = (
+				8A447C7B2A29DF9400C2F4CC /* SVGKit */,
+				8A447C7D2A29DF9400C2F4CC /* SVGKitSwift */,
+			);
 			productName = WeatherYandexAPI;
 			productReference = 8AFC1F382A2563D600647CDA /* WeatherYandexAPI.app */;
 			productType = "com.apple.product-type.application";
@@ -146,6 +154,9 @@
 				Base,
 			);
 			mainGroup = 8AFC1F2F2A2563D600647CDA;
+			packageReferences = (
+				8A447C7A2A29DF9400C2F4CC /* XCRemoteSwiftPackageReference "SVGKit" */,
+			);
 			productRefGroup = 8AFC1F392A2563D600647CDA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -400,6 +411,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8A447C7A2A29DF9400C2F4CC /* XCRemoteSwiftPackageReference "SVGKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SVGKit/SVGKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8A447C7B2A29DF9400C2F4CC /* SVGKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A447C7A2A29DF9400C2F4CC /* XCRemoteSwiftPackageReference "SVGKit" */;
+			productName = SVGKit;
+		};
+		8A447C7D2A29DF9400C2F4CC /* SVGKitSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A447C7A2A29DF9400C2F4CC /* XCRemoteSwiftPackageReference "SVGKit" */;
+			productName = SVGKitSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8AFC1F302A2563D600647CDA /* Project object */;
 }
