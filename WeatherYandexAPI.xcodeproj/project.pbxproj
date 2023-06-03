@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		8A447C7C2A29DF9400C2F4CC /* SVGKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8A447C7B2A29DF9400C2F4CC /* SVGKit */; };
 		8A447C7E2A29DF9400C2F4CC /* SVGKitSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8A447C7D2A29DF9400C2F4CC /* SVGKitSwift */; };
-		8A447C822A2A225200C2F4CC /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A447C812A2A225200C2F4CC /* NetworkManager.swift */; };
+		8A447C842A2B852D00C2F4CC /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A447C832A2B852D00C2F4CC /* NetworkManager.swift */; };
 		8AFC1F3C2A2563D600647CDA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFC1F3B2A2563D600647CDA /* AppDelegate.swift */; };
 		8AFC1F3E2A2563D600647CDA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFC1F3D2A2563D600647CDA /* SceneDelegate.swift */; };
 		8AFC1F402A2563D600647CDA /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFC1F3F2A2563D600647CDA /* WeatherViewController.swift */; };
@@ -20,7 +20,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		8A447C812A2A225200C2F4CC /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+
+		8A447C832A2B852D00C2F4CC /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		8AFC1F382A2563D600647CDA /* WeatherYandexAPI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherYandexAPI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AFC1F3B2A2563D600647CDA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8AFC1F3D2A2563D600647CDA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -45,6 +46,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8A447C852A2B85B200C2F4CC /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				8A447C832A2B852D00C2F4CC /* NetworkManager.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
 		8AFC1F2F2A2563D600647CDA = {
 			isa = PBXGroup;
 			children = (
@@ -66,6 +75,7 @@
 			children = (
 				8A447C812A2A225200C2F4CC /* NetworkManager.swift */,
 				8AFC1F512A27F1A700647CDA /* Models */,
+				8A447C852A2B85B200C2F4CC /* Network */,
 				8AFC1F522A27F1BA00647CDA /* ViewControllers */,
 				8AFC1F532A27F1C800647CDA /* Storyboards */,
 				8AFC1F542A27F1D600647CDA /* System */,
