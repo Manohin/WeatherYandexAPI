@@ -15,6 +15,7 @@ struct WeatherData: Codable {
     }
 }
 
+
 struct Fact: Codable {
     let temp: Int
     let feelsLike: Int
