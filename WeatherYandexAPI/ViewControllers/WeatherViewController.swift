@@ -10,37 +10,38 @@ import CoreLocation
 import SVGKit
 
 final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
-    
+
+    private let networkManager = NetworkManager.shared
     var latitude: Double = 0.0
     var longitude: Double = 0.0
     var locationManager: CLLocationManager!
-    
+
     @IBOutlet weak var tempLabel: UILabel!
     @IBOutlet weak var recommendationsLabel: UILabel!
     @IBOutlet weak var conditionLabel: UILabel!
     @IBOutlet var feelsLikeLabel: UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var weatherIconImageView: UIImageView!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         recommendationsLabel.textColor = .systemBlue
-        
+
         // Инициализация CLLocationManager
         locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
-        
+
         // Запуск мониторинга местоположения
         startUpdatingLocation()
     }
-    
+
     private func setupUI() {
         activityIndicator.startAnimating()
         recommendationsLabel.textColor = .systemBlue
     }
-    
+
     private func checkLocationAuthorization() {
         let status = locationManager.authorizationStatus
         switch status {
@@ -54,60 +55,74 @@ final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
             break
         }
     }
-    
+
     private func startUpdatingLocation() {
         let status = locationManager.authorizationStatus
         if status == .authorizedWhenInUse || status == .authorizedAlways {
             locationManager.startUpdatingLocation()
         }
     }
-    
+
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         checkLocationAuthorization()
     }
-    
+
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else {
             return
         }
         latitude = location.coordinate.latitude
         longitude = location.coordinate.longitude
-        
+
         fetchDataFromAPI()
     }
-    
+
     private func fetchDataFromAPI() {
-        NetworkManager.shared.fetchData(for: latitude, longitude: longitude) { [weak self] weatherData in
-            guard let self = self, let weatherData = weatherData else {
+        NetworkManager.shared.fetchData(for: latitude, longitude: longitude) { [weak self] weatherData, error in
+            guard let self = self else {
                 return
             }
-            
+
+            if let error = error {
+                print("Ошибка при получении данных о погоде: \(error)")
+                DispatchQueue.main.async {
+                    self.activityIndicator.stopAnimating()
+                }
+                return
+            }
+
+            guard let weatherData = weatherData else {
+                print("Получены пустые данные о погоде")
+                DispatchQueue.main.async {
+                    self.activityIndicator.stopAnimating()
+                }
+                return
+            }
+
             DispatchQueue.main.async {
                 self.updateUI(with: weatherData)
                 self.activityIndicator.stopAnimating()
             }
         }
     }
-    
+
     private func updateUI(with weatherData: WeatherData) {
-        if let icon = weatherData.fact.icon {
-            let iconURLString = "https://yastatic.net/weather/i/icons/funky/dark/\(icon).svg"
-            if let iconURL = URL(string: iconURLString) {
-                DispatchQueue.global().async {
-                    let svgImage = SVGKImage(contentsOf: iconURL)
+        if let icon = weatherData.fact.icon, let iconURL = URL(string: "https://yastatic.net/weather/i/icons/funky/dark/\(icon).svg") {
+            DispatchQueue.global().async {
+                if let svgImage = SVGKImage(contentsOf: iconURL) {
                     DispatchQueue.main.async {
-                        self.weatherIconImageView.image = svgImage?.uiImage
+                        self.weatherIconImageView.image = svgImage.uiImage
                     }
                 }
             }
         }
-        
+
         recommendationsLabel.text = getRecommendations(for: Double(weatherData.fact.feelsLike))
         tempLabel.text = "Температура: \(weatherData.fact.temp)°C"
         feelsLikeLabel.text = "Ощущается как: \(weatherData.fact.feelsLike)°C"
-        conditionLabel.text = NetworkManager.shared.getConditionLabel(for: weatherData.fact.condition)
+        conditionLabel.text = networkManager.getConditionLabel(for: weatherData.fact.condition)
     }
-    
+
     private func getRecommendations(for feelsLike: Double) -> String {
         switch feelsLike {
         case 1...10:
@@ -119,12 +134,12 @@ final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
         case 28...35:
             return "Жарко. Носите легкую и воздухопроницаемую одежду. Используйте шорты, футболки, топы или платья из легких материалов. Оптимально выбирать светлые цвета, которые отражают солнечные лучи. Наденьте шляпу или кепку, чтобы защититься от солнца. Используйте удобную и дышащую обувь, например, сандалии или открытые туфли."
         case 36...:
-            return "Очень жарко. По возможности, оставайтесь в прохладном помещении. При выходе на улицу одевайтесь очень легко, пейте больше воды и старайтесь проводить меньше времени под прямыми солнечными лучами"
+            return "Очень жарко. По возможности, оставайтесь в прохладном помещении. При выходе на улицу одевайтесь очень легко, пейте больше воды и старайтесь проводить меньше времени под прямыми солнечными лучами."
         default:
             return "Мороз. Наденьте теплую куртку (пуховик, пальто), шапку, теплую обувь, теплые штаны."
         }
     }
-    
+
     private func showLocationPermissionAlert() {
         let alert = UIAlertController(title: "Ошибка", message: "Вы не разрешили определение местоположения. Погода будет отображаться некорректно. Пожалуйста, разрешите доступ в настройках приложения.", preferredStyle: .alert)
         let settingsAction = UIAlertAction(title: "Настройки", style: .default) { (_) in

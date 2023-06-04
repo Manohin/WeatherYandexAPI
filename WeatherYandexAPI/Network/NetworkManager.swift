@@ -32,38 +32,42 @@ class NetworkManager {
         "cloudy": "облачно с прояснениями",
     ]
     
+    private lazy var session: URLSession = {
+        let configuration = URLSessionConfiguration.default
+        return URLSession(configuration: configuration)
+    }()
+    
     private init() {}
     
-    func fetchData(for latitude: Double, longitude: Double, completion: @escaping (WeatherData?) -> Void) {
+    func fetchData(for latitude: Double, longitude: Double, completion: @escaping (WeatherData?, Error?) -> Void) {
         guard let url = URL(string: "https://api.weather.yandex.ru/v2/informers?lat=\(latitude)&lon=\(longitude)") else {
-            completion(nil)
+            completion(nil, NetworkError.invalidURL)
             return
         }
         
         var request = URLRequest(url: url)
         request.addValue(APIKeys.yandexAPIKey, forHTTPHeaderField: "X-Yandex-API-Key")
         
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
+        let task = session.dataTask(with: request) { [weak self] (data, response, error) in
             if let error = error {
-                print("Ошибка при выполнении запроса: \(error.localizedDescription)")
-                completion(nil)
+                completion(nil, error)
                 return
             }
             
             guard let data = data else {
-                print("Данные пустые")
-                completion(nil)
+                completion(nil, NetworkError.emptyData)
                 return
             }
             
             do {
                 let weatherData = try JSONDecoder().decode(WeatherData.self, from: data)
-                completion(weatherData)
+                completion(weatherData, nil)
             } catch {
-                print("Ошибка при декодировании данных: \(error.localizedDescription)")
-                completion(nil)
+                completion(nil, NetworkError.decodingError(error))
             }
-        }.resume()
+        }
+        
+        task.resume()
     }
     
     func getConditionLabel(for condition: String) -> String {
@@ -73,4 +77,10 @@ class NetworkManager {
             return condition
         }
     }
+}
+
+enum NetworkError: Error {
+    case invalidURL
+    case emptyData
+    case decodingError(Error)
 }
