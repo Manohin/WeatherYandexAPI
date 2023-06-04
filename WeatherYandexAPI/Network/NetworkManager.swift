@@ -7,7 +7,7 @@
 
 import Foundation
 
-class NetworkManager {
+final class NetworkManager {
     static let shared = NetworkManager()
     
     private let weatherConditions: [String: String] = [
@@ -33,54 +33,76 @@ class NetworkManager {
     ]
     
     private lazy var session: URLSession = {
-        let configuration = URLSessionConfiguration.default
-        return URLSession(configuration: configuration)
-    }()
-    
-    private init() {}
-    
-    func fetchData(for latitude: Double, longitude: Double, completion: @escaping (WeatherData?, Error?) -> Void) {
-        guard let url = URL(string: "https://api.weather.yandex.ru/v2/informers?lat=\(latitude)&lon=\(longitude)") else {
-            completion(nil, NetworkError.invalidURL)
-            return
-        }
+            let configuration = URLSessionConfiguration.default
+            configuration.timeoutIntervalForRequest = 30
+            configuration.requestCachePolicy = .useProtocolCachePolicy
+            return URLSession(configuration: configuration)
+        }()
         
-        var request = URLRequest(url: url)
-        request.addValue(APIKeys.yandexAPIKey, forHTTPHeaderField: "X-Yandex-API-Key")
+        private var dataTask: URLSessionDataTask?
         
-        let task = session.dataTask(with: request) { [weak self] (data, response, error) in
-            if let error = error {
-                completion(nil, error)
+        private init() {}
+        
+        func fetchData(for latitude: Double, longitude: Double, completion: @escaping (WeatherData?, Error?) -> Void) {
+            guard let url = URL(string: "https://api.weather.yandex.ru/v2/informers?lat=\(latitude)&lon=\(longitude)") else {
+                completion(nil, NetworkError.invalidURL)
                 return
             }
             
-            guard let data = data else {
-                completion(nil, NetworkError.emptyData)
-                return
+            var request = URLRequest(url: url)
+            request.addValue(APIKeys.yandexAPIKey, forHTTPHeaderField: "X-Yandex-API-Key")
+            
+            // Отменяем предыдущий запрос, если он выполняется
+            dataTask?.cancel()
+            
+            let task = session.dataTask(with: request) { (data, response, error) in
+                if let error = error {
+                    completion(nil, error)
+                    return
+                }
+                
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    completion(nil, NetworkError.unknownError)
+                    return
+                }
+                
+                guard let data = data else {
+                    completion(nil, NetworkError.emptyData)
+                    return
+                }
+                
+                if httpResponse.statusCode != 200 {
+                    completion(nil, NetworkError.serverError(httpResponse.statusCode))
+                    return
+                }
+                
+                do {
+                    let weatherData = try JSONDecoder().decode(WeatherData.self, from: data)
+                    completion(weatherData, nil)
+                } catch {
+                    completion(nil, NetworkError.decodingError(error))
+                }
             }
             
-            do {
-                let weatherData = try JSONDecoder().decode(WeatherData.self, from: data)
-                completion(weatherData, nil)
-            } catch {
-                completion(nil, NetworkError.decodingError(error))
-            }
+            // Сохраняем ссылку на текущий запрос
+            dataTask = task
+            
+            task.resume()
         }
         
-        task.resume()
-    }
-    
-    func getConditionLabel(for condition: String) -> String {
-        if let translatedCondition = weatherConditions[condition] {
-            return "На улице " + translatedCondition
-        } else {
-            return condition
+        func getConditionLabel(for condition: String) -> String {
+            if let translatedCondition = weatherConditions[condition] {
+                return "На улице " + translatedCondition
+            } else {
+                return condition
+            }
         }
     }
-}
 
-enum NetworkError: Error {
-    case invalidURL
-    case emptyData
-    case decodingError(Error)
-}
+    enum NetworkError: Error {
+        case invalidURL
+        case emptyData
+        case decodingError(Error)
+        case serverError(Int)
+        case unknownError
+    }

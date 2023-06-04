@@ -37,6 +37,11 @@ final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
         startUpdatingLocation()
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        locationManager.stopUpdatingLocation()
+    }
+
     private func setupUI() {
         activityIndicator.startAnimating()
         recommendationsLabel.textColor = .systemBlue
