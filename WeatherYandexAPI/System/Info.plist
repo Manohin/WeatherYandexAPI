@@ -7,10 +7,6 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Приложению требуется обновить ваше местоположение</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Приложению требуется обновить ваше местоположение</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
