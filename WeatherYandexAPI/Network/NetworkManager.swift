@@ -41,7 +41,7 @@ class NetworkManager {
         }
         
         var request = URLRequest(url: url)
-        request.addValue("937ce0f2-8247-49e0-9d9a-c4bdaeab8f93", forHTTPHeaderField: "X-Yandex-API-Key")
+        request.addValue(APIKeys.yandexAPIKey, forHTTPHeaderField: "X-Yandex-API-Key")
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             if let error = error {
