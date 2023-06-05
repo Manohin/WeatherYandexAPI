@@ -147,7 +147,7 @@ final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
 
     private func showLocationPermissionAlert() {
         let alert = UIAlertController(title: "Ошибка", message: "Вы не разрешили определение местоположения. Погода будет отображаться некорректно. Пожалуйста, разрешите доступ в настройках приложения.", preferredStyle: .alert)
-        let settingsAction = UIAlertAction(title: "Настройки", style: .default) { (_) in
+        let settingsAction = UIAlertAction(title: "Настройки", style: .default) { _ in
             guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
                 return
             }
