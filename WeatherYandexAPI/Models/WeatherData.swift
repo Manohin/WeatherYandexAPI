@@ -5,8 +5,6 @@
 //  Created by Alexey Manokhin on 30.05.2023.
 //
 
-import UIKit
-
 struct WeatherData: Codable {
     let fact: Fact
     
