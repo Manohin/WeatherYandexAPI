@@ -9,17 +9,17 @@ import UIKit
 import CoreLocation
 import SVGKit
 
-final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
+class WeatherViewController: UIViewController, CLLocationManagerDelegate {
 
     private let networkManager = NetworkManager.shared
-    var latitude: Double = 0.0
-    var longitude: Double = 0.0
-    var locationManager: CLLocationManager!
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
+    private var locationManager: CLLocationManager!
 
     @IBOutlet weak var tempLabel: UILabel!
     @IBOutlet weak var recommendationsLabel: UILabel!
     @IBOutlet weak var conditionLabel: UILabel!
-    @IBOutlet var feelsLikeLabel: UILabel!
+    @IBOutlet weak var feelsLikeLabel: UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var weatherIconImageView: UIImageView!
 
@@ -27,19 +27,12 @@ final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
         super.viewDidLoad()
         setupUI()
         recommendationsLabel.textColor = .systemBlue
-
-        // Инициализация CLLocationManager
-        locationManager = CLLocationManager()
-        locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-
-        // Запуск мониторинга местоположения
-        startUpdatingLocation()
+        initLocationManager()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        locationManager.stopUpdatingLocation()
+        stopUpdatingLocation()
     }
 
     private func setupUI() {
@@ -47,9 +40,18 @@ final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
         recommendationsLabel.textColor = .systemBlue
     }
 
+    private func initLocationManager() {
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        checkLocationAuthorization()
+    }
+
     private func checkLocationAuthorization() {
-        let status = locationManager.authorizationStatus
-        switch status {
+        
+        let manager = CLLocationManager()
+        
+        switch manager.authorizationStatus {
         case .authorizedWhenInUse, .authorizedAlways:
             startUpdatingLocation()
         case .denied, .restricted:
@@ -62,10 +64,15 @@ final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     }
 
     private func startUpdatingLocation() {
-        let status = locationManager.authorizationStatus
+        let manager = CLLocationManager()
+        let status = manager.authorizationStatus
         if status == .authorizedWhenInUse || status == .authorizedAlways {
             locationManager.startUpdatingLocation()
         }
+    }
+
+    private func stopUpdatingLocation() {
+        locationManager.stopUpdatingLocation()
     }
 
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -79,8 +86,14 @@ final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
         latitude = location.coordinate.latitude
         longitude = location.coordinate.longitude
 
+        // Проверка, был ли запрос на получение данных о погоде уже отправлен
+        guard !networkManager.isFetchingData else {
+            return
+        }
+
         fetchDataFromAPI()
     }
+
 
     private func fetchDataFromAPI() {
         NetworkManager.shared.fetchData(for: latitude, longitude: longitude) { [weak self] weatherData, error in
@@ -89,6 +102,11 @@ final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
             }
 
             if let error = error {
+                if (error as NSError).code == NSURLErrorCancelled {
+                    // Запрос был отменен, не требуется дальнейшая обработка
+                    return
+                }
+
                 print("Ошибка при получении данных о погоде: \(error)")
                 DispatchQueue.main.async {
                     self.activityIndicator.stopAnimating()
@@ -96,6 +114,7 @@ final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
                 return
             }
 
+            // Обработка полученных данных о погоде
             guard let weatherData = weatherData else {
                 print("Получены пустые данные о погоде")
                 DispatchQueue.main.async {
@@ -111,15 +130,20 @@ final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
 
+
     private func updateUI(with weatherData: WeatherData) {
         if let icon = weatherData.fact.icon, let iconURL = URL(string: "https://yastatic.net/weather/i/icons/funky/dark/\(icon).svg") {
-            DispatchQueue.global().async {
-                if let svgImage = SVGKImage(contentsOf: iconURL) {
+            URLSession.shared.dataTask(with: iconURL) { [weak self] (data, _, error) in
+                if let data = data, let svgImage = SVGKImage(data: data) {
                     DispatchQueue.main.async {
-                        self.weatherIconImageView.image = svgImage.uiImage
+                        self?.weatherIconImageView.image = svgImage.uiImage
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self?.showErrorAlert(message: "Ошибка при загрузке иконки погоды")
                     }
                 }
-            }
+            }.resume()
         }
 
         recommendationsLabel.text = getRecommendations(for: Double(weatherData.fact.feelsLike))
@@ -158,6 +182,13 @@ final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
         let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
         alert.addAction(settingsAction)
         alert.addAction(cancelAction)
+        present(alert, animated: true, completion: nil)
+    }
+
+    private func showErrorAlert(message: String) {
+        let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(okAction)
         present(alert, animated: true, completion: nil)
     }
 }

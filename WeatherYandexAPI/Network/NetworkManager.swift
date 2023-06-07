@@ -9,6 +9,7 @@ import Foundation
 
 final class NetworkManager {
     static let shared = NetworkManager()
+    var isFetchingData = false
     
     private let weatherConditions: [String: String] = [
         "overcast": "облачно",
