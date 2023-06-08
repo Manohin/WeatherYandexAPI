@@ -44,14 +44,21 @@ final class NetworkManager {
         
         private init() {}
         
-        func fetchData(for latitude: Double, longitude: Double, completion: @escaping (WeatherData?, Error?) -> Void) {
-            guard let url = URL(string: "https://api.weather.yandex.ru/v2/informers?lat=\(latitude)&lon=\(longitude)") else {
+        func fetchData(for latitude: Double,
+                       longitude: Double,
+                       completion: @escaping (WeatherData?, Error?) -> Void) {
+            guard let url = URL(
+                string: "https://api.weather.yandex.ru/v2/informers?lat=\(latitude)&lon=\(longitude)"
+            ) else {
                 completion(nil, NetworkError.invalidURL)
                 return
             }
             
             var request = URLRequest(url: url)
-            request.addValue(APIKeys.yandexAPIKey, forHTTPHeaderField: "X-Yandex-API-Key")
+            request.addValue(
+                APIKeys.yandexAPIKey,
+                forHTTPHeaderField: "X-Yandex-API-Key"
+            )
             
             // Отменяем предыдущий запрос, если он выполняется
             dataTask?.cancel()

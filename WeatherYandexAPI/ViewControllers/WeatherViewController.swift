@@ -10,43 +10,43 @@ import CoreLocation
 import SVGKit
 
 class WeatherViewController: UIViewController, CLLocationManagerDelegate {
-
+    
     private let networkManager = NetworkManager.shared
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
     private var locationManager: CLLocationManager!
-
+    
     @IBOutlet weak var tempLabel: UILabel!
     @IBOutlet weak var recommendationsLabel: UILabel!
     @IBOutlet weak var conditionLabel: UILabel!
     @IBOutlet weak var feelsLikeLabel: UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var weatherIconImageView: UIImageView!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         recommendationsLabel.textColor = .systemBlue
         initLocationManager()
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         stopUpdatingLocation()
     }
-
+    
     private func setupUI() {
         activityIndicator.startAnimating()
         recommendationsLabel.textColor = .systemBlue
     }
-
+    
     private func initLocationManager() {
         locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         checkLocationAuthorization()
     }
-
+    
     private func checkLocationAuthorization() {
         
         let manager = CLLocationManager()
@@ -62,7 +62,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
             break
         }
     }
-
+    
     private func startUpdatingLocation() {
         let manager = CLLocationManager()
         let status = manager.authorizationStatus
@@ -70,50 +70,54 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
             locationManager.startUpdatingLocation()
         }
     }
-
+    
     private func stopUpdatingLocation() {
         locationManager.stopUpdatingLocation()
     }
-
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    
+    func locationManager(_ manager: CLLocationManager,
+                         didChangeAuthorization status: CLAuthorizationStatus) {
         checkLocationAuthorization()
     }
-
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    
+    func locationManager(_ manager: CLLocationManager,
+                         didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else {
             return
         }
         latitude = location.coordinate.latitude
         longitude = location.coordinate.longitude
-
+        
         // Проверка, был ли запрос на получение данных о погоде уже отправлен
         guard !networkManager.isFetchingData else {
             return
         }
-
+        
         fetchDataFromAPI()
     }
-
-
+    
+    
     private func fetchDataFromAPI() {
-        NetworkManager.shared.fetchData(for: latitude, longitude: longitude) { [weak self] weatherData, error in
+        NetworkManager.shared.fetchData(
+            for: latitude,
+            longitude: longitude) { [weak self] weatherData, error in
             guard let self = self else {
                 return
             }
-
+            
             if let error = error {
                 if (error as NSError).code == NSURLErrorCancelled {
                     // Запрос был отменен, не требуется дальнейшая обработка
                     return
                 }
-
+                
                 print("Ошибка при получении данных о погоде: \(error)")
                 DispatchQueue.main.async {
                     self.activityIndicator.stopAnimating()
                 }
                 return
             }
-
+            
             // Обработка полученных данных о погоде
             guard let weatherData = weatherData else {
                 print("Получены пустые данные о погоде")
@@ -122,17 +126,20 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
                 }
                 return
             }
-
+            
             DispatchQueue.main.async {
                 self.updateUI(with: weatherData)
                 self.activityIndicator.stopAnimating()
             }
         }
     }
-
-
+    
+    
     private func updateUI(with weatherData: WeatherData) {
-        if let icon = weatherData.fact.icon, let iconURL = URL(string: "https://yastatic.net/weather/i/icons/funky/dark/\(icon).svg") {
+        if let icon = weatherData.fact.icon, let iconURL = URL(
+            string: "https://yastatic.net/weather/i/icons/funky/dark/\(icon).svg"
+        )
+        {
             URLSession.shared.dataTask(with: iconURL) { [weak self] (data, _, error) in
                 if let data = data, let svgImage = SVGKImage(data: data) {
                     DispatchQueue.main.async {
@@ -140,18 +147,27 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
                     }
                 } else {
                     DispatchQueue.main.async {
-                        self?.showErrorAlert(message: "Ошибка при загрузке иконки погоды")
+                        self?.showErrorAlert(
+                            message: "Ошибка при загрузке иконки погоды"
+                        )
                     }
                 }
             }.resume()
         }
-
-        recommendationsLabel.text = getRecommendations(for: Double(weatherData.fact.feelsLike))
+        
+        recommendationsLabel.text = getRecommendations(
+            for: Double(weatherData.fact.feelsLike)
+        )
         tempLabel.text = "Температура: \(weatherData.fact.temp)°C"
-        feelsLikeLabel.text = "Ощущается как: \(weatherData.fact.feelsLike)°C"
-        conditionLabel.text = networkManager.getConditionLabel(for: weatherData.fact.condition)
+        feelsLikeLabel.text = (
+            weatherData.fact.feelsLike == weatherData.fact.temp
+        ) ?
+        "Ощущается так же" : "Ощущается как: \(weatherData.fact.feelsLike)°C"
+        conditionLabel.text = networkManager.getConditionLabel(
+            for: weatherData.fact.condition
+        )
     }
-
+    
     private func getRecommendations(for feelsLike: Double) -> String {
         switch feelsLike {
         case 1...10:
@@ -168,7 +184,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
             return "Мороз. Наденьте теплую куртку (пуховик, пальто), шапку, теплую обувь, теплые штаны."
         }
     }
-
+    
     private func showLocationPermissionAlert() {
         let alert = UIAlertController(title: "Ошибка", message: "Вы не разрешили определение местоположения. Погода будет отображаться некорректно. Пожалуйста, разрешите доступ в настройках приложения.", preferredStyle: .alert)
         let settingsAction = UIAlertAction(title: "Настройки", style: .default) { _ in
@@ -184,7 +200,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
         alert.addAction(cancelAction)
         present(alert, animated: true, completion: nil)
     }
-
+    
     private func showErrorAlert(message: String) {
         let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
