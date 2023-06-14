@@ -7,10 +7,6 @@
 
 struct WeatherData: Codable {
     let fact: Fact
-    
-//    private enum CodingKeys: String, CodingKey {
-//        case fact
-//    }
 }
 
 struct Fact: Codable {
