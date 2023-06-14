@@ -9,7 +9,7 @@ import UIKit
 import CoreLocation
 import SVGKit
 
-class WeatherViewController: UIViewController, CLLocationManagerDelegate {
+final class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
     private let networkManager = NetworkManager.shared
     private var latitude: Double = 0.0
