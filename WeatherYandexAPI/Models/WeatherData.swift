@@ -9,7 +9,7 @@ struct WeatherData: Codable {
     let fact: Fact
     
     private enum CodingKeys: String, CodingKey {
-        case fact = "fact"
+        case fact
     }
 }
 
@@ -20,9 +20,9 @@ struct Fact: Codable {
     let icon: String?
     
     private enum CodingKeys: String, CodingKey {
-        case temp = "temp"
-        case condition = "condition"
+        case temp
+        case condition
         case feelsLike = "feels_like"
-        case icon = "icon"
+        case icon
     }
 }
